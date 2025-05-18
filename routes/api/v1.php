@@ -9,4 +9,5 @@ Route::controller(ProductController::class)
         Route::get('/', 'index');
         Route::post('/', 'store');
         Route::get('/{product}', 'detail');
+        Route::put('/{product}', 'update');
     });

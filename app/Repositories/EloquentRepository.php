@@ -30,4 +30,13 @@ abstract class EloquentRepository implements EloquentRepositoryInterface
     {
         return $this->model->create($data);
     }
+
+    public function update($id, array $data)
+    {
+        $model = $this->model->find($id);
+        if ($model) {
+            return $model->update($data);
+        }
+        return false;
+    }
 }

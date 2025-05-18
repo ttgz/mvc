@@ -20,4 +20,11 @@ class ProductRequest extends BaseRequest
             'name' => 'required'
         ];
     }
+
+    public function methodPut()
+    {
+        return [
+            'name' => 'nullable',
+        ];
+    }
 }

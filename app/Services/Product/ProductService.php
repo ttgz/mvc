@@ -19,4 +19,10 @@ class ProductService implements ProductServiceInterface
         $data = $request->validated();
         return $this->repository->create($data);
     }
+
+    public function update(Request $request, $product)
+    {
+        $data = $request->validated();
+        return $this->repository->update($product->id, $data);
+    }
 }

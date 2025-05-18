@@ -54,4 +54,5 @@ trait JsonResponse
             'message' => $message ?: 'Thực hiện không thành công'
         ], $status);
     }
+
 }
