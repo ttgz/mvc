@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Product;
 
+use App\Http\Controllers\BaseController;
 use App\Supports\Log;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ProductRequest;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\ProductResourceCollection;
@@ -14,7 +14,7 @@ use App\Supports\JsonResponse;
 use Illuminate\Foundation\Exceptions\Renderer\Exception;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class ProductController extends BaseController
 {
     use JsonResponse, Log;
 
@@ -24,6 +24,7 @@ class ProductController extends Controller
     ) {
         $this->repository = $repository;
         $this->service = $service;
+        $this->middleware('auth:api');
     }
 
     /**

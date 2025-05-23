@@ -11,3 +11,13 @@ Route::controller(ProductController::class)
         Route::get('/{product}', 'detail');
         Route::put('/{product}', 'update');
     });
+
+
+Route::controller(App\Http\Controllers\Auth\AuthController::class)
+    ->prefix('auth')
+    ->group(function () {
+        Route::post('/login', 'login')->name('login');
+
+        Route::post('/refresh', 'refresh')->name('refresh');
+        Route::get('/me', 'me')->name('me');
+    });

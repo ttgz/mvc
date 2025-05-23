@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ApiKeyMiddlware
+class ApiKeyMiddleware
 {
     /**
      * Handle an incoming request.

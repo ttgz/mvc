@@ -1,10 +1,17 @@
 <?php
 
-use App\Http\Middleware\ApiKeyMiddlware;
+use App\Http\Middleware\ApiKeyMiddleware;
+use App\Http\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Container\Attributes\Auth;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,8 +26,20 @@ return Application::configure(basePath: dirname(__DIR__))
         }
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->api(append: [ApiKeyMiddlware::class]);
+        $middleware->api(prepend: [ApiKeyMiddleware::class]);
+        $middleware->alias(['auth' => Authenticate::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+        $exceptions->render(function (TokenInvalidException $e, Request $request) {
+            return response()->json(['message' => 'Token không hợp lệ'], 401);
+        });
+
+        $exceptions->render(function (TokenExpiredException $e, Request $request) {
+            return response()->json(['message' => 'Token đã hết hạn'], 401);
+        });
+
+        $exceptions->render(function (JWTException $e, Request $request) {
+            return response()->json(['message' => 'Không tìm thấy token'], 401);
+        });
+    })
+    ->create();

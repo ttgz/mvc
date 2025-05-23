@@ -39,4 +39,13 @@ abstract class EloquentRepository implements EloquentRepositoryInterface
         }
         return false;
     }
+
+    public function delete($id)
+    {
+        $model = $this->model->find($id);
+        if ($model) {
+            return $model->delete();
+        }
+        return false;
+    }
 }
