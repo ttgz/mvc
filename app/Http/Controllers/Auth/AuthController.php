@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\BaseController;
+use App\Models\User;
+use App\Services\AuthServiceApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class AuthController extends BaseController
 {
-
+    use AuthServiceApi;
     public function __construct()
     {
-        $this->middleware('auth:api')->except(['login']);
+        $this->middleware('auth:api')->except(['login', 'register']);
     }
 
     public function login(Request $request)
@@ -26,6 +28,17 @@ class AuthController extends BaseController
         return $this->respondWithToken($token);
     }
 
+    public function register(Request $request)
+    {
+        $data = $request->only('name', 'email', 'password');
+        $user = User::create($data);
+
+        if (!$user) {
+            return response()->json(['error' => 'Registration failed'], 400);
+        }
+
+        return response()->json(['message' => 'User registered successfully'], 201);
+    }
     public function refresh()
     {
         return $this->respondWithToken(Auth::guard('api')->refresh());
